@@ -15,8 +15,11 @@ static git_odb_backend *new_backend(size_t position)
 	if (b == NULL)
 		return NULL;
 
-	b->base.free = (void (*)(git_odb_backend *)) git__free;
 	b->base.version = GIT_ODB_BACKEND_VERSION;
+#ifdef GIT_EXPERIMENTAL_SHA256
+	b->base.oid_type = GIT_OID_SHA1;
+#endif
+	b->base.free = (void (*)(git_odb_backend *)) git__free;
 	b->position = position;
 	return (git_odb_backend *)b;
 }

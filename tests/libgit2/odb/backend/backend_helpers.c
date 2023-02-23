@@ -155,6 +155,9 @@ int build_fake_backend(
 	GIT_ERROR_CHECK_ALLOC(backend);
 
 	backend->parent.version = GIT_ODB_BACKEND_VERSION;
+#ifdef GIT_EXPERIMENTAL_SHA256
+	backend->parent.oid_type = GIT_OID_SHA1;
+#endif
 
 	backend->objects = objects;
 

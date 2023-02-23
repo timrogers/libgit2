@@ -883,6 +883,10 @@ static int pack_backend__alloc(
 
 	backend->parent.version = GIT_ODB_BACKEND_VERSION;
 
+#ifdef GIT_EXPERIMENTAL_SHA256
+	backend->parent.oid_type = backend->opts.oid_type;
+#endif
+
 	backend->parent.read = &pack_backend__read;
 	backend->parent.read_prefix = &pack_backend__read_prefix;
 	backend->parent.read_header = &pack_backend__read_header;

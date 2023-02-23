@@ -1179,14 +1179,20 @@ int git_odb__backend_loose(
 	backend = git__calloc(1, alloclen);
 	GIT_ERROR_CHECK_ALLOC(backend);
 
+	normalize_options(&backend->options, opts);
+
 	backend->parent.version = GIT_ODB_BACKEND_VERSION;
+
+#ifdef GIT_EXPERIMENTAL_SHA256
+	backend->parent.oid_type = backend->options.oid_type;
+#endif
+
 	backend->objects_dirlen = objects_dirlen;
 	memcpy(backend->objects_dir, objects_dir, objects_dirlen);
 
 	if (backend->objects_dir[backend->objects_dirlen - 1] != '/')
 		backend->objects_dir[backend->objects_dirlen++] = '/';
 
-	normalize_options(&backend->options, opts);
 	backend->oid_hexsize = git_oid_hexsize(backend->options.oid_type);
 
 	backend->parent.read = &loose_backend__read;

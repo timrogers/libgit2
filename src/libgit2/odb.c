@@ -587,6 +587,13 @@ static int add_backend_internal(
 
 	GIT_ERROR_CHECK_VERSION(backend, GIT_ODB_BACKEND_VERSION, "git_odb_backend");
 
+#ifdef GIT_EXPERIMENTAL_SHA256
+	if (!backend->oid_type) {
+		git_error_set(GIT_ERROR_ODB, "backend oid type is not set");
+		return -1;
+	}
+#endif
+
 	/* Check if the backend is already owned by another ODB */
 	GIT_ASSERT(!backend->odb || backend->odb == odb);
 
@@ -1704,7 +1711,6 @@ int git_odb_open_wstream(
 	    (error = hash_header(ctx, size, type)) < 0)
 		goto done;
 
-	(*stream)->oid_type = db->options.oid_type;
 	(*stream)->hash_ctx = ctx;
 	(*stream)->declared_size = size;
 	(*stream)->received_bytes = 0;
@@ -1750,7 +1756,7 @@ int git_odb_stream_finalize_write(git_oid *out, git_odb_stream *stream)
 	git_hash_final(out->id, stream->hash_ctx);
 
 #ifdef GIT_EXPERIMENTAL_SHA256
-	out->type = stream->oid_type;
+	out->type = stream->backend->oid_type;
 #endif
 
 	if (git_odb__freshen(stream->backend->odb, out))

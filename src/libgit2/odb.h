@@ -180,7 +180,7 @@ int git_odb__hashfile(
 	git_object_t object_type,
 	git_oid_t oid_type);
 
-GIT_EXTERN(int) git_odb__backend_loose(
+int git_odb__backend_loose(
 	git_odb_backend **out,
 	const char *objects_dir,
 	git_odb_backend_loose_options *opts);

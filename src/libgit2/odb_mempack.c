@@ -178,6 +178,9 @@ int git_mempack_new(git_odb_backend **out)
 		return -1;
 
 	db->parent.version = GIT_ODB_BACKEND_VERSION;
+#ifdef GIT_EXPERIMENTAL_SHA256
+	db->parent.oid_type = GIT_OID_SHA1;
+#endif
 	db->parent.read = &impl__read;
 	db->parent.write = &impl__write;
 	db->parent.read_header = &impl__read_header;

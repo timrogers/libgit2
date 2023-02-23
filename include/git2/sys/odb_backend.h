@@ -26,6 +26,11 @@ GIT_BEGIN_DECL
  */
 struct git_odb_backend {
 	unsigned int version;
+
+#ifdef GIT_EXPERIMENTAL_SHA256
+	git_oid_t oid_type;
+#endif
+
 	git_odb *odb;
 
 	/* read and read_prefix each return to libgit2 a buffer which
